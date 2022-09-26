@@ -29,29 +29,11 @@ if (!defined('FOXXEY')) {
 		
 		private $textsDir;
 		private $textArr;
-		
-		/* CONFIG */
-		private $mdlName;
-		private $config = array();
-		private $defaultConfig = array('randTexts' => 
-		array(
-			'textsDir' 			=> ETC.'messages/randTexts/',
-			'debug'				=> false
-		));
-		
-		/**
-		 * randTexts constructor.
-		 * @param $textType
-		 * @param bool $debug
-		 */
+
 		function __construct($textType, $debug = false){
-			/*ConfInit*/
-				$this->mdlName = basename(__FILE__);
-				$conf = conff::confGen($this->mdlName, $this->defaultConfig);
-				$this->config = $conf->readInIarray();
 			
-			$this->textsDir 	= $this->config['textsDir'];
-			$this->debug 		= $this->config['debug'];
+			$this->textsDir 	= ENGINE_DIR.'data/randTexts/';
+			$this->debug 		= $debug;
 			$this->textToSend 	= $textType;
 
 			if($this->debug){
@@ -69,7 +51,7 @@ if (!defined('FOXXEY')) {
 			if(file_exists($filePath)) {
 				$this->textArr = file($filePath);
 				$randWord = rand(0, count($this->textArr)-1);
-				$answer = str_replace("\n", "", $this->textArr[$randWord]);
+				$answer = str_replace("�", "", $this->textArr[$randWord]);
 			} else {
 			$answer = '{"message": "File '.$filePath.' not found!"}}';
 			}
@@ -81,10 +63,10 @@ if (!defined('FOXXEY')) {
 			//WIP
 		}
 
-		public static function getUserName(){
+		public static function getRandText($file){
 			global $config;
 				if(class_exists('randTexts')) {
-					$randTexts = new randTexts('noName', $config['randTextsDebug']);
+					$randTexts = new randTexts($file, false);
 						$name = $randTexts->textOut();
 					} else {
 						echo '{"message": "Module randTexts not found!", "desc": "Can`t say an unknown user who is he today!"},';
@@ -92,18 +74,4 @@ if (!defined('FOXXEY')) {
 					}
 				return $name;
 			}
-		
-
-		public static function wrongHWIDmessage(){
-			global $config;
-					if(class_exists('randTexts')) {
-						$randTexts = new randTexts('wrongHWID', $config['randTextsDebug']);
-						$name = $randTexts->textOut();
-					} else {
-						echo '{"message": "Module randTexts not found!", "desc": "Can`t say user how wrong he is!"},';
-						$name = 'Incorrect HWID';
-					}
-			return $name;
-		}
-	
 	}

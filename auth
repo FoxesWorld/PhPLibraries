@@ -39,6 +39,8 @@ if(!defined('FOXXEY')) {
 			}
 			
 			public static function passVerify($input, $realPass) {
+				$status = false;
+
 				if(strlen($realPass) == 32 && ctype_xdigit($realPass)) {
 					if($realPass == md5(md5($input))) {
 						$status = true;
@@ -57,7 +59,7 @@ if(!defined('FOXXEY')) {
 				$db = new db($config['db_user'],$config['db_pass'],$config['db_database']);
 				if (password_needs_rehash($realPass, PASSWORD_DEFAULT)) {
 					session_regenerate_id();
-					$realPass = password_hash($pass, PASSWORD_DEFAULT);
+					$this->realPass = password_hash($this->pass, PASSWORD_DEFAULT);
 					$new_pass_hash = 'password='.$db->safesql($realPass).', ';
 				} else {
 					$new_pass_hash = '';

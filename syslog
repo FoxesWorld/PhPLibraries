@@ -7,14 +7,14 @@ class Logger {
     private $file;
     private $error;
 	private $logDate;
-	private $bindDir = ENGINE_DIR.'/logs/';
+	private $bindDir = ENGINE_DIR.'/cache/logs/';
 	
 	
     function __construct($logname) {
 		global $config;
-		$this->logDate = '['.CURRENT_DATE.'] '.date('m:s').' ';
+		$this->logDate = '['.CURRENT_DATE.'] ('.date("H:i:s").') ';
 		$this->file = $this->bindDir.$logname.'.log';
-		$this->WriteLine("LogFile created...");
+		//$this->WriteLine("Log started...");
 
     }
 
